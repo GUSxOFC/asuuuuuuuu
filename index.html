@@ -1,0 +1,2078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WAYANG PROJECT</title>
+    <style>
+        :root {
+            --primary: #ff6b00;
+            --secondary: #ff9500;
+            --accent: #ffcc00;
+            --dark: #1a1a1a;
+            --darker: #0d0d0d;
+            --light: #ffffff;
+            --success: #28a745;
+            --error: #dc3545;
+            --warning: #ffc107;
+            --owner: #ff00ff;
+            --admin: #00ffff;
+            --developer: #00ff00;
+            --resseler: #ffff00;
+            --biasa: #cccccc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: var(--darker);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255, 107, 0, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 80% 70%, rgba(255, 149, 0, 0.1) 0%, transparent 20%);
+        }
+
+        .wayang-logo {
+            text-align: center;
+            margin-bottom: 20px;
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 5px var(--primary), 0 0 10px var(--primary);
+            }
+            to {
+                text-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary);
+            }
+        }
+
+        .glass-panel {
+            background: rgba(26, 26, 26, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 107, 0, 0.3);
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            padding: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .glass-panel:hover {
+            box-shadow: 0 0 20px rgba(255, 107, 0, 0.5);
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(255, 107, 0, 0.5);
+            text-transform: uppercase;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--primary);
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(26, 26, 26, 0.7);
+            border: 1px solid rgba(255, 107, 0, 0.5);
+            border-radius: 8px;
+            color: var(--light);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--light);
+            border: none;
+            padding: 14px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-size: 16px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            box-shadow: 0 5px 15px rgba(255, 107, 0, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 107, 0, 0.6);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 300px;
+            overflow-y: auto;
+            background: rgba(26, 26, 26, 0.7);
+            border-left: 4px solid var(--primary);
+        }
+
+        .success {
+            border-left-color: var(--success);
+        }
+
+        .error {
+            border-left-color: var(--error);
+        }
+
+        .warning {
+            border-left-color: var(--warning);
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .nav {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 107, 0, 0.3);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .nav-menu {
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            padding: 12px 15px;
+            margin-bottom: 5px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 107, 0, 0.1);
+            border-left: 3px solid var(--primary);
+        }
+
+        .nav-item.active {
+            background: rgba(255, 107, 0, 0.2);
+            border-left: 3px solid var(--accent);
+        }
+
+        .panel {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        .subpanel {
+            display: none;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 107, 0, 0.3);
+        }
+
+        .subpanel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Status Badges */
+        .status-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .status-owner {
+            background-color: var(--owner);
+            color: black;
+        }
+
+        .status-admin {
+            background-color: var(--admin);
+            color: black;
+        }
+
+        .status-developer {
+            background-color: var(--developer);
+            color: black;
+        }
+
+        .status-resseler {
+            background-color: var(--resseler);
+            color: black;
+        }
+
+        .status-biasa {
+            background-color: var(--biasa);
+            color: black;
+        }
+
+        /* Menu Separator */
+        .menu-separator {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            margin: 15px 0;
+        }
+
+        /* Attack Progress */
+        .attack-progress {
+            margin-top: 20px;
+            height: 10px;
+            background: rgba(26, 26, 26, 0.7);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: rgba(26, 26, 26, 0.7);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Tool Grid */
+        .tool-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .tool-card {
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(255, 107, 0, 0.3);
+        }
+
+        /* Popup Notification */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+
+        .popup-content {
+            background: var(--darker);
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            border: 1px solid var(--primary);
+            box-shadow: 0 0 30px rgba(255, 107, 0, 0.5);
+            position: relative;
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: var(--light);
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .login-container {
+                padding: 20px;
+            }
+            
+            .tool-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="login-screen" class="login-container">
+        <div class="glass-panel">
+            <div class="wayang-logo">
+                <h1>WAYANG PROJECT</h1>
+                <div style="font-size: 12px; color: var(--accent);">Shadow Cyber Tools</div>
+            </div>
+            <div class="form-group">
+                <label for="username"><i class="fas fa-user"></i> Username</label>
+                <input type="text" id="username" placeholder="Enter username" autocomplete="off">
+            </div>
+            <div class="form-group">
+                <label for="password"><i class="fas fa-lock"></i> Password</label>
+                <input type="password" id="password" placeholder="Enter password" autocomplete="off">
+            </div>
+            <button id="login-btn">
+                <i class="fas fa-sign-in-alt"></i> LOGIN
+            </button>
+            <div id="login-result" class="result" style="display: none;"></div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="app" style="display: none;">
+        <div class="container">
+            <!-- Navigation -->
+            <div class="nav glass-panel">
+                <div class="nav-header">
+                    <div id="user-name" style="font-size: 18px; font-weight: bold;">GUEST</div>
+                    <div id="user-status" class="status-biasa" style="margin: 5px 0;">GUEST</div>
+                    <div style="font-size: 12px;">Last Login: <span id="last-login">Never</span></div>
+                </div>
+                <div class="nav-menu">
+                    <div class="menu-separator"></div>
+                    <div class="nav-item active" data-panel="dashboard">
+                        <i class="fas fa-home"></i> Dashboard
+                    </div>
+                    
+                    <div class="menu-separator"></div>
+                    <div class="nav-item" data-panel="whatsapp">
+                        <i class="fab fa-whatsapp"></i> WhatsApp Tools
+                    </div>
+                    <div class="nav-item" data-panel="ddos">
+                        <i class="fas fa-network-wired"></i> DDoS Center
+                    </div>
+                    <div class="nav-item" data-panel="spam">
+                        <i class="fas fa-envelope"></i> Spam Tools
+                    </div>
+                    <div class="nav-item" data-panel="phishing">
+                        <i class="fas fa-fish"></i> Phishing
+                    </div>
+                    <div class="nav-item" data-panel="website">
+                        <i class="fas fa-globe"></i> Website Builder
+                    </div>
+                    <div class="nav-item" data-panel="wifi">
+                        <i class="fas fa-wifi"></i> WiFi Tools
+                    </div>
+                    
+                    <div class="menu-separator"></div>
+                    <div class="nav-item admin-only" data-panel="admin" style="display: none;">
+                        <i class="fas fa-user-shield"></i> Admin Panel
+                    </div>
+                    <div class="nav-item owner-only" data-panel="owner" style="display: none;">
+                        <i class="fas fa-crown"></i> Owner Tools
+                    </div>
+                    <div class="nav-item developer-only" data-panel="developer" style="display: none;">
+                        <i class="fas fa-code"></i> Developer Tools
+                    </div>
+                    
+                    <div class="menu-separator"></div>
+                    <div class="nav-item" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </div>
+                </div>
+                <div style="padding: 15px; margin-top: auto; border-top: 1px solid rgba(255, 107, 0, 0.3);">
+                    <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 5px;">
+                        <i class="fas fa-circle" style="color: var(--success); font-size: 10px;"></i>
+                        <span style="font-size: 12px;">WAYANG SYSTEM ONLINE</span>
+                    </div>
+                    <div style="font-size: 10px; text-align: center; color: var(--accent);">v2.0.1</div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="content glass-panel">
+                <!-- Dashboard Panel -->
+                <div id="dashboard" class="panel active">
+                    <h2 style="color: var(--primary); margin-bottom: 20px;">
+                        <i class="fas fa-home"></i> WAYANG PROJECT DASHBOARD
+                    </h2>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="total-attacks">1,248</div>
+                            <div class="stat-label">TOTAL ATTACKS</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="success-rate">92%</div>
+                            <div class="stat-label">SUCCESS RATE</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="active-users">24</div>
+                            <div class="stat-label">ACTIVE USERS</div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin: 20px 0; padding: 15px; background: rgba(26, 26, 26, 0.7); border-radius: 8px;">
+                        <h3 style="color: var(--accent); margin-bottom: 10px;">
+                            <i class="fas fa-user"></i> USER INFORMATION
+                        </h3>
+                        <div style="display: grid; grid-template-columns: 100px 1fr; gap: 10px; margin-bottom: 10px;">
+                            <div style="color: var(--primary);">Username:</div>
+                            <div id="dashboard-username">-</div>
+                            <div style="color: var(--primary);">Status:</div>
+                            <div id="dashboard-status">-</div>
+                            <div style="color: var(--primary);">Registered:</div>
+                            <div id="dashboard-registered">-</div>
+                            <div style="color: var(--primary);">Last Login:</div>
+                            <div id="dashboard-lastlogin">-</div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin: 20px 0; padding: 15px; background: rgba(26, 26, 26, 0.7); border-radius: 8px;">
+                        <h3 style="color: var(--accent); margin-bottom: 10px;">
+                            <i class="fas fa-bell"></i> SYSTEM NOTIFICATIONS
+                        </h3>
+                        <div style="font-size: 13px;">
+                            <div style="padding: 8px 0; border-bottom: 1px solid rgba(255, 107, 0, 0.2);">
+                                <i class="fas fa-check-circle" style="color: var(--success);"></i> System updated to v2.0.1
+                            </div>
+                            <div style="padding: 8px 0; border-bottom: 1px solid rgba(255, 107, 0, 0.2);">
+                                <i class="fas fa-bug" style="color: var(--error);"></i> Fixed WhatsApp bug detection
+                            </div>
+                            <div style="padding: 8px 0;">
+                                <i class="fas fa-info-circle" style="color: var(--accent);"></i> New DDoS methods added
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px; text-align: center; font-size: 12px; color: rgba(255, 255, 255, 0.5);">
+                        WAYANG PROJECT © 2023 - Shadow Cyber Tools
+                    </div>
+                </div>
+
+                <!-- WhatsApp Panel -->
+                <div id="whatsapp" class="panel">
+                    <h2 style="color: var(--primary); margin-bottom: 20px;">
+                        <i class="fab fa-whatsapp"></i> WHATSAPP TOOLS
+                    </h2>
+                    
+                    <div class="tool-grid">
+                        <div class="glass-panel tool-card" onclick="showWhatsAppPanel('bug')">
+                            <h3 style="color: var(--accent); margin-bottom: 10px;">
+                                <i class="fas fa-bug"></i> WhatsApp Bug
+                            </h3>
+                            <div style="font-size: 13px;">
+                                Crash or freeze target WhatsApp account
+                            </div>
+                        </div>
+                        <div class="glass-panel tool-card" onclick="showWhatsAppPanel('spam')">
+                            <h3 style="color: var(--accent); margin-bottom: 10px;">
+                                <i class="fas fa-envelope"></i> WhatsApp Spam
+                            </h3>
+                            <div style="font-size: 13px;">
+                                Flood target with WhatsApp messages
+                            </div>
+                        </div>
+                        <div class="glass-panel tool-card" onclick="showWhatsAppPanel('track')">
+                            <h3 style="color: var(--accent); margin-bottom: 10px;">
+                                <i class="fas fa-map-marker-alt"></i> WhatsApp Track
+                            </h3>
+                            <div style="font-size: 13px;">
+                                Track WhatsApp user location
+                            </div>
+                        </div>
+                        <div class="glass-panel tool-card" onclick="showWhatsAppPanel('bot')">
+                            <h3 style="color: var(--accent); margin-bottom: 10px;">
+                                <i class="fas fa-robot"></i> WhatsApp Bot
+                            </h3>
+                            <div style="font-size: 13px;">
+                                Create automated WhatsApp bot
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- WhatsApp Bug Subpanel -->
+                    <div id="whatsapp-bug" class="subpanel">
+                        <h3 style="color: var(--accent); margin-bottom: 15px;">
+                            <i class="fas fa-bug"></i> WhatsApp Bug Attack
+                        </h3>
+                        <div class="form-group">
+                            <label for="target-number">Target Number (with country code)</label>
+                            <input type="text" id="target-number" placeholder="+6281234567890">
+                        </div>
+                        <div class="form-group">
+                            <label for="bug-type">Bug Type</label>
+                            <select id="bug-type">
+                                <option value="crash">Crash</option>
+                                <option value="freeze">Freeze</option>
+                                <option value="bomb">Message Bomb</option>
+                                <option value="account">Account Takeover</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="intensity">Intensity (1-10)</label>
+                            <input type="range" id="intensity" min="1" max="10" value="5">
+                            <div style="text-align: center; margin-top: 5px;">
+                                <span id="intensity-value">5</span>
+                            </div>
+                        </div>
+                        <button id="whatsapp-attack-btn" onclick="launchWhatsAppBug()">
+                            <i class="fas fa-rocket"></i> LAUNCH ATTACK
+                        </button>
+                        <div id="bug-result" class="result"></div>
+                    </div>
+                    
+                    <!-- WhatsApp Spam Subpanel -->
+                    <div id="whatsapp-spam" class="subpanel" style="display: none;">
+                        <h3 style="color: var(--accent); margin-bottom: 15px;">
+                            <i class="fas fa-envelope"></i> WhatsApp Spam Attack
+                        </h3>
+                        <div class="form-group">
+                            <label for="spam-target">Target Number</label>
+                            <input type="text" id="spam-target" placeholder="+6281234567890">
+                        </div>
+                        <div class="form-group">
+                            <label for="spam-message">Message</label>
+                            <textarea id="spam-message" rows="3" placeholder="Enter spam message"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="spam-count">Number of Messages</label>
+                            <input type="number" id="spam-count" min="1" max="1000" value="50">
+                        </div>
+                        <button onclick="launchWhatsAppSpam()">
+                            <i class="fas fa-paper-plane"></i> START SPAM
+                        </button>
+                        <div id="spam-result" class="result" style="margin-top: 15px;"></div>
+                    </div>
+                    
+                    <!-- WhatsApp Track Subpanel -->
+                    <div id="whatsapp-track" class="subpanel" style="display: none;">
+                        <h3 style="color: var(--accent); margin-bottom: 15px;">
+                            <i class="fas fa-map-marker-alt"></i> WhatsApp Tracking
+                        </h3>
+                        <div class="form-group">
+                            <label for="track-number">Target Number</label>
+                            <input type="text" id="track-number" placeholder="+6281234567890">
+                        </div>
+                        <div class="form-group">
+                            <label for="track-method">Tracking Method</label>
+                            <select id="track-method">
+                                <option value="ip">IP Tracking</option>
+                                <option value="gps">GPS Tracking</option>
+                                <option value="lastseen">Last Seen</option>
+                            </select>
+                        </div>
+                        <button onclick="startTracking()">
+                            <i class="fas fa-search-location"></i> TRACK USER
+                        </button>
+                        <div id="track-result" class="result" style="margin-top: 15px;"></div>
+                    </div>
+                    
+                    <!-- WhatsApp Bot Subpanel -->
+                    <div id="whatsapp-bot" class="subpanel" style="display: none;">
+                        <h3 style="color: var(--accent); margin-bottom: 15px;">
+                            <i class="fas fa-robot"></i> WhatsApp Bot Generator
+                        </h3>
+                        <div class="form-group">
+                            <label for="bot-type">Bot Type</label>
+                            <select id="bot-type">
+                                <option value="auto-reply">Auto Reply</option>
+                                <option value="spam-bot">Spam Bot</option>
+                                <option value="scraper">Group Scraper</option>
+                                <option value="forwarder">Message Forwarder</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="bot-trigger">Trigger Word (for auto-reply)</label>
+                            <input type="text" id="bot-trigger" placeholder="Hello">
+                        </div>
+                        <div class="form-group">
+                            <label for="bot-response">Response Message</label>
+                            <textarea id="bot-response" rows="3" placeholder="Enter response message"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="bot-target">Target Group/Number (optional)</label>
+                            <input type="text" id="bot-target" placeholder="Group name or number">
+                        </div>
+                        <button onclick="generateWhatsAppBot()">
+                            <i class="fas fa-download"></i> GENERATE BOT SCRIPT
+                        </button>
+                        <div id="bot-result" class="result" style="margin-top: 15px;"></div>
+                    </div>
+                </div>
+
+                <!-- DDoS Panel -->
+                <div id="ddos" class="panel">
+                    <h2 style="color: var(--primary); margin-bottom: 20px;">
+                        <i class="fas fa-network-wired"></i> DDoS ATTACK CENTER
+                    </h2>
+                    
+                    <div class="form-group">
+                        <label for="target-ip">Target IP/Domain</label>
+                        <input type="text" id="target-ip" placeholder="example.com or 192.168.1.1">
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                        <div class="form-group">
+                            <label for="duration">Duration (seconds)</label>
+                            <input type="number" id="duration" min="1" max="3600" value="60">
+                        </div>
+                        <div class="form-group">
+                            <label for="threads">Threads (1-100)</label>
+                            <input type="number" id="threads" min="1" max="100" value="10">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ddos-method">Attack Method</label>
+                        <select id="ddos-method">
+                            <option value="http">HTTP Flood</option>
+                            <option value="syn">SYN Flood</option>
+                            <option value="udp">UDP Flood</option>
+                            <option value="icmp">ICMP Flood</option>
+                            <option value="slowloris">Slowloris</option>
+                            <option value="dns">DNS Amplification</option>
+                        </select>
+                    </div>
+                    
+                    <button id="ddos-attack-btn" onclick="launchDDoSAttack()">
+                        <i class="fas fa-bolt"></i> START ATTACK
+                    </button>
+                    
+                    <div class="attack-progress" id="ddos-progress" style="display: none;">
+                        <div class="progress-bar" id="ddos-progress-bar"></div>
+                    </div>
+                    
+                    <div class="stats-grid" style="margin-top: 20px;">
+                        <div class="stat-card">
+                            <div class="stat-value" id="packets-sent">0</div>
+                            <div class="stat-label">PACKETS SENT</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="attack-time">0s</div>
+                            <div class="stat-label">DURATION</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="packet-rate">0/s</div>
+                            <div class="stat-label">PACKET RATE</div>
+                        </div>
+                    </div>
+                    
+                    <div id="ddos-result" class="result" style="margin-top: 20px;"></div>
+                </div>
+
+                <!-- Spam Panel -->
+                <div id="spam" class="panel">
+                    <h2 style="color: var(--primary); margin-bottom: 20px;">
+                        <i class="fas fa-envelope"></i> SPAM TOOLS
+                    </h2>
+                    
+                    <div class="tool-grid">
+                        <div class="glass-panel tool-card" onclick="showSpamPanel('sms')">
+                            <h3 style="color: var(--accent); margin-bottom: 10px;">
+                                <i class="fas fa-sms"></i> SMS Spam
+                            </h3>
+                            <div style="font-size: 13px;">
+                                Flood target phone with SMS messages
+                            </div>
+                        </div>
+                        <div class="glass-panel tool-card" onclick="showSpamPanel('email')">
+                            <h3 style="color: var(--accent); margin-bottom: 10px;">
+                                <i class="fas fa-at"></i> Email Spam
+                            </h3>
+                            <div style="font-size: 13px;">
+                                Flood target email inbox
+                            </div>
+                        </div>
+                        <div class="glass-panel tool-card" onclick="showSpamPanel('call')">
+                            <h3 style="color: var(--accent); margin-bottom: 10px;">
+                                <i class="fas fa-phone"></i> Call Spam
+                            </h3>
+                            <div style="font-size: 13px;">
+                                Flood target with phone calls
+                            </div>
+                        </div>
+                        <div class="glass-panel tool-card" onclick="showSpamPanel('social')">
+                            <h3 style="color: var(--accent); margin-bottom: 10px;">
+                                <i class="fas fa-share-alt"></i> Social Media
+                            </h3>
+                            <div style="font-size: 13px;">
+                                Spam social media accounts
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- SMS Spam Subpanel -->
+                    <div id="spam-sms" class="subpanel">
+                        <h3 style="color: var(--accent); margin-bottom: 15px;">
+                            <i class="fas fa-sms"></i> SMS Spam Attack
+                        </h3>
+                        <div class="form-group">
+                            <label for="sms-number">Target Number (with country code)</label>
+                            <input type="text" id="sms-number" placeholder="+6281234567890">
+                        </div>
+                        <div class="form-group">
+                            <label for="sms-count">Number of Messages</label>
+                            <input type="number" id="sms-count" min="1" max="1000" value="100">
+                        </div>
+                        <div class="form-group">
+                            <label for="sms-delay">Delay (ms)</label>
+                            <input type="number" id="sms-delay" min="10" max="10000" value="500">
+                        </div>
+                        <button onclick="launchSmsSpam()">
+                            <i class="fas fa-paper-plane"></i> START SPAM
+                        </button>
+                        <div id="sms-result" class="result" style="margin-top: 15px;"></div>
+                    </div>
+                    
+                    <!-- Email Spam Subpanel -->
+                    <div id="spam-email" class="subpanel" style="display: none;">
+                        <h3 style="color: var(--accent); margin-bottom: 15px;">
+                            <i class="fas fa-at"></i> Email Spam Attack
+                        </h3>
+                        <div class="form-group">
+                            <label for="email-target">Target Email</label>
+                            <input type="email" id="email-target" placeholder="target@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="email-subject">Subject</label>
+                            <input type="text" id="email-subject" placeholder="Important message">
+                        </div>
+                        <div class="form-group">
+                            <label for="email-message">Message</label>
+                            <textarea id="email-message" rows="3" placeholder="Enter email content"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="email-count">Number of Emails</label>
+                            <input type="number" id="email-count" min="1" max="500" value="50">
+                        </div>
+                        <button onclick="launchEmailSpam()">
+                            <i class="fas fa-envelope"></i> SEND SPAM
+                        </button>
+                        <div id="email-result" class="result" style="margin-top: 15px;"></div>
+                    </div>
+                </div>
+
+                <!-- Phishing Panel -->
+                <div id="phishing" class="panel">
+                    <h2 style="color: var(--primary); margin-bottom: 20px;">
+                        <i class="fas fa-fish"></i> PHISHING TOOLS
+                    </h2>
+                    
+                    <div style="margin-bottom: 20px; background: rgba(255, 107, 0, 0.1); padding: 15px; border-radius: 8px; border-left: 3px solid var(--error);">
+                        <i class="fas fa-exclamation-triangle" style="color: var(--error);"></i> 
+                        <span style="color: var(--error);">WARNING:</span> These tools are for educational purposes only. Unauthorized use is illegal.
+                    </div>
+                    
+                    <div class="tool-grid">
+                        <div class="glass-panel tool-card" onclick="showPhishingPanel('login')">
+                            <h3 style="color: var(--accent); margin-bottom: 10px;">
+                                <i class="fas fa-sign-in-alt"></i> Login Page
+                            </h3>
+                            <div style="font-size: 13px;">
+                                Create fake login pages
+                            </div>
+                        </div>
+                        <div class="glass-panel tool-card" onclick="showPhishingPanel('keylogger')">
+                            <h3 style="color: var(--accent); margin-bottom: 10px;">
+                                <i class="fas fa-keyboard"></i> Keylogger
+                            </h3>
+                            <div style="font-size: 13px;">
+                                Capture keystrokes from target
+                            </div>
+                        </div>
+                        <div class="glass-panel tool-card" onclick="showPhishingPanel('cookie')">
+                            <h3 style="color: var(--accent); margin-bottom: 10px;">
+                                <i class="fas fa-cookie"></i> Cookie Stealer
+                            </h3>
+                            <div style="font-size: 13px;">
+                                Steal browser cookies
+                            </div>
+                        </div>
+                        <div class="glass-panel tool-card" onclick="showPhishingPanel('redirect')">
+                            <h3 style="color: var(--accent); margin-bottom: 10px;">
+                                <i class="fas fa-directions"></i> URL Redirect
+                            </h3>
+                            <div style="font-size: 13px;">
+                                Create malicious redirects
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Login Phishing Subpanel -->
+                    <div id="phishing-login" class="subpanel">
+                        <h3 style="color: var(--accent); margin-bottom: 15px;">
+                            <i class="fas fa-sign-in-alt"></i> Fake Login Page Generator
+                        </h3>
+                        <div class="form-group">
+                            <label for="phish-service">Service to Clone</label>
+                            <select id="phish-service">
+                                <option value="facebook">Facebook</option>
+                                <option value="google">Google</option>
+                                <option value="instagram">Instagram</option>
+                                <option value="twitter">Twitter</option>
+                                <option value="whatsapp">WhatsApp Web</option>
+                                <option value="netflix">Netflix</option>
+                                <option value="steam">Steam</option>
+                                <option value="bank">Bank Login</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="phish-url">Redirect URL (optional)</label>
+                            <input type="text" id="phish-url" placeholder="https://legitimate-site.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="phish-title">Custom Page Title (optional)</label>
+                            <input type="text" id="phish-title" placeholder="Login to continue">
+                        </div>
+                        <button onclick="generatePhishPage()">
+                            <i class="fas fa-code"></i> GENERATE PAGE
+                        </button>
+                        <div id="phish-result" class="result" style="margin-top: 15px;"></div>
+                    </div>
+                    
+                    <!-- Keylogger Subpanel -->
+                    <div id="phishing-keylogger" class="subpanel" style="display: none;">
+                        <h3 style="color: var(--accent); margin-bottom: 15px;">
+                            <i class="fas fa-keyboard"></i> Keylogger Generator
+                        </h3>
+                        <div class="form-group">
+                            <label for="keylogger-type">Keylogger Type</label>
+                            <select id="keylogger-type">
+                                <option value="js">JavaScript</option>
+                                <option value="php">PHP</option>
+                                <option value="python">Python</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="keylogger-webhook">Webhook URL</label>
+                            <input type="text" id="keylogger-webhook" placeholder="https://webhook.site/...">
+                        </div>
+                        <button onclick="generateKeylogger()">
+                            <i class="fas fa-file-code"></i> GENERATE KEYLOGGER
+                        </button>
+                        <div id="keylogger-result" class="result" style="margin-top: 15px;"></div>
+                    </div>
+                </div>
+
+                <!-- Website Builder Panel -->
+                <div id="website" class="panel">
+                    <h2 style="color: var(--primary); margin-bottom: 20px;">
+                        <i class="fas fa-globe"></i> WEBSITE BUILDER
+                    </h2>
+                    
+                    <div class="tool-grid">
+                        <div class="glass-panel tool-card" onclick="showWebsitePanel('generator')">
+                            <h3 style="color: var(--accent); margin-bottom: 10px;">
+                                <i class="fas fa-magic"></i> Website Generator
+                            </h3>
+                            <div style="font-size: 13px;">
+                                Create a complete website automatically
+                            </div>
+                        </div>
+                        <div class="glass-panel tool-card" onclick="showWebsitePanel('landing')">
+                            <h3 style="color: var(--accent); margin-bottom: 10px;">
+                                <i class="fas fa-file-alt"></i> Landing Page
+                            </h3>
+                            <div style="font-size: 13px;">
+                                Create high-converting landing pages
+                            </div>
+                        </div>
+                        <div class="glass-panel tool-card" onclick="showWebsitePanel('portfolio')">
+                            <h3 style="color: var(--accent); margin-bottom: 10px;">
+                                <i class="fas fa-briefcase"></i> Portfolio
+                            </h3>
+                            <div style="font-size: 13px;">
+                                Build professional portfolio sites
+                            </div>
+                        </div>
+                        <div class="glass-panel tool-card" onclick="showWebsitePanel('ecommerce')">
+                            <h3 style="color: var(--accent); margin-bottom: 10px;">
+                                <i class="fas fa-shopping-cart"></i> E-Commerce
+                            </h3>
+                            <div style="font-size: 13px;">
+                                Create online store templates
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Website Generator Subpanel -->
+                    <div id="website-generator" class="subpanel">
+                        <h3 style="color: var(--accent); margin-bottom: 15px;">
+                            <i class="fas fa-magic"></i> Website Generator
+                        </h3>
+                        <div class="form-group">
+                            <label for="website-type">Website Type</label>
+                            <select id="website-type">
+                                <option value="business">Business</option>
+                                <option value="blog">Blog</option>
+                                <option value="portfolio">Portfolio</option>
+                                <option value="ecommerce">E-Commerce</option>
+                                <option value="personal">Personal</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="website-name">Website Name</label>
+                            <input type="text" id="website-name" placeholder="My Awesome Site">
+                        </div>
+                        <div class="form-group">
+                            <label for="website-color">Primary Color</label>
+                            <input type="color" id="website-color" value="#ff6b00">
+                        </div>
+                        <div class="form-group">
+                            <label for="website-pages">Pages to Include</label>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                <label style="display: flex; align-items: center;">
+                                    <input type="checkbox" id="page-home" checked> Home
+                                </label>
+                                <label style="display: flex; align-items: center;">
+                                    <input type="checkbox" id="page-about"> About
+                                </label>
+                                <label style="display: flex; align-items: center;">
+                                    <input type="checkbox" id="page-contact"> Contact
+                                </label>
+                                <label style="display: flex; align-items: center;">
+                                    <input type="checkbox" id="page-blog"> Blog
+                                </label>
+                                <label style="display: flex; align-items: center;">
+                                    <input type="checkbox" id="page-products"> Products
+                                </label>
+                                <label style="display: flex; align-items: center;">
+                                    <input type="checkbox" id="page-services"> Services
+                                </label>
+                            </div>
+                        </div>
+                        <button onclick="generateWebsite()">
+                            <i class="fas fa-download"></i> GENERATE WEBSITE
+                        </button>
+                        <div id="website-result" class="result" style="margin-top: 15px;"></div>
+                    </div>
+                    
+                    <!-- Landing Page Subpanel -->
+                    <div id="website-landing" class="subpanel" style="display: none;">
+                        <h3 style="color: var(--accent); margin-bottom: 15px;">
+                            <i class="fas fa-file-alt"></i> Landing Page Generator
+                        </h3>
+                        <div class="form-group">
+                            <label for="landing-purpose">Page Purpose</label>
+                            <select id="landing-purpose">
+                                <option value="product">Product Launch</option>
+                                <option value="service">Service Promotion</option>
+                                <option value="lead">Lead Generation</option>
+                                <option value="event">Event Registration</option>
+                                <option value="download">App Download</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="landing-headline">Headline</label>
+                            <input type="text" id="landing-headline" placeholder="Amazing Product That Solves Your Problem">
+                        </div>
+                        <div class="form-group">
+                            <label for="landing-subhead">Subheadline</label>
+                            <input type="text" id="landing-subhead" placeholder="Join thousands of satisfied customers">
+                        </div>
+                        <div class="form-group">
+                            <label for="landing-cta">Call-to-Action Text</label>
+                            <input type="text" id="landing-cta" placeholder="Get Started Now">
+                        </div>
+                        <button onclick="generateLandingPage()">
+                            <i class="fas fa-download"></i> GENERATE LANDING PAGE
+                        </button>
+                        <div id="landing-result" class="result" style="margin-top: 15px;"></div>
+                    </div>
+                </div>
+
+                <!-- WiFi Tools Panel -->
+                <div id="wifi" class="panel">
+                    <h2 style="color: var(--primary); margin-bottom: 20px;">
+                        <i class="fas fa-wifi"></i> WiFi TOOLS
+                    </h2>
+                    
+                    <div style="margin-bottom: 20px; background: rgba(255, 107, 0, 0.1); padding: 15px; border-radius: 8px; border-left: 3px solid var(--warning);">
+                        <i class="fas fa-exclamation-triangle" style="color: var(--warning);"></i> 
+                        <span style="color: var(--warning);">NOTE:</span> Some features require physical access to the target network.
+                    </div>
+                    
+                    <div class="tool-grid">
+                        <div class="glass-panel tool-card" onclick="showWifiPanel('password')">
+                            <h3 style="color: var(--accent); margin-bottom: 10px;">
+                                <i class="fas fa-key"></i> WiFi Password
+                            </h3>
+                            <div style="font-size: 13px;">
+                                Reveal saved WiFi passwords
+                            </div>
+                        </div>
+                        <div class="glass-panel tool-card" onclick="showWifiPanel('scanner')">
+                            <h3 style="color: var(--accent); margin-bottom: 10px;">
+                                <i class="fas fa-search"></i> Network Scanner
+                            </h3>
+                            <div style="font-size: 13px;">
+                                Scan nearby WiFi networks
+                            </div>
+                        </div>
+                        <div class="glass-panel tool-card" onclick="showWifiPanel('analyzer')">
+                            <h3 style="color: var(--accent); margin-bottom: 10px;">
+                                <i class="fas fa-chart-bar"></i> Network Analyzer
+                            </h3>
+                            <div style="font-size: 13px;">
+                                Analyze network traffic
+                            </div>
+                        </div>
+                        <div class="glass-panel tool-card" onclick="showWifiPanel('deauth')">
+                            <h3 style="color: var(--accent); margin-bottom: 10px;">
+                                <i class="fas fa-user-slash"></i> Deauth Attack
+                            </h3>
+                            <div style="font-size: 13px;">
+                                Disconnect devices from network
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- WiFi Password Subpanel -->
+                    <div id="wifi-password" class="subpanel">
+                        <h3 style="color: var(--accent); margin-bottom: 15px;">
+                            <i class="fas fa-key"></i> WiFi Password Revealer
+                        </h3>
+                        <div class="form-group">
+                            <label for="wifi-os">Operating System</label>
+                            <select id="wifi-os">
+                                <option value="windows">Windows</option>
+                                <option value="macos">MacOS</option>
+                                <option value="linux">Linux</option>
+                                <option value="android">Android (Root Required)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="wifi-interface">Network Interface (optional)</label>
+                            <input type="text" id="wifi-interface" placeholder="Wi-Fi or eth0">
+                        </div>
+                        <button onclick="revealWifiPasswords()">
+                            <i class="fas fa-search"></i> REVEAL PASSWORDS
+                        </button>
+                        <div id="wifi-result" class="result" style="margin-top: 15px;"></div>
+                    </div>
+                    
+                    <!-- Network Scanner Subpanel -->
+                    <div id="wifi-scanner" class="subpanel" style="display: none;">
+                        <h3 style="color: var(--accent); margin-bottom: 15px;">
+                            <i class="fas fa-search"></i> Network Scanner
+                        </h3>
+                        <div class="form-group">
+                            <label for="scan-range">IP Range to Scan</label>
+                            <input type="text" id="scan-range" placeholder="192.168.1.1-255">
+                        </div>
+                        <div class="form-group">
+                            <label for="scan-speed">Scan Speed</label>
+                            <select id="scan-speed">
+                                <option value="fast">Fast</option>
+                                <option value="normal" selected>Normal</option>
+                                <option value="slow">Slow (Stealth)</option>
+                            </select>
+                        </div>
+                        <button onclick="scanNetwork()">
+                            <i class="fas fa-network-wired"></i> START SCAN
+                        </button>
+                        <div id="scan-result" class="result" style="margin-top: 15px;"></div>
+                    </div>
+                </div>
+
+                <!-- Admin Panel -->
+                <div id="admin" class="panel">
+                    <h2 style="color: var(--primary); margin-bottom: 20px;">
+                        <i class="fas fa-user-shield"></i> ADMIN PANEL
+                    </h2>
+                    
+                    <div style="display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 107, 0, 0.3); padding-bottom: 10px;">
+                        <div class="tab active" data-tab="users">Users</div>
+                        <div class="tab" data-tab="logs">Logs</div>
+                        <div class="tab" data-tab="settings">Settings</div>
+                    </div>
+                    
+                    <!-- Users Tab -->
+                    <div id="users-tab" class="tab-content active">
+                        <h3 style="color: var(--accent); margin-bottom: 15px;">
+                            <i class="fas fa-users"></i> User Management
+                        </h3>
+                        
+                        <div style="overflow-x: auto; margin-bottom: 20px;">
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: left; padding: 10px; border-bottom: 1px solid rgba(255, 107, 0, 0.3);">Username</th>
+                                        <th style="text-align: left; padding: 10px; border-bottom: 1px solid rgba(255, 107, 0, 0.3);">Role</th>
+                                        <th style="text-align: left; padding: 10px; border-bottom: 1px solid rgba(255, 107, 0, 0.3);">Last Login</th>
+                                        <th style="text-align: left; padding: 10px; border-bottom: 1px solid rgba(255, 107, 0, 0.3);">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="user-list">
+                                    <!-- Users will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <h3 style="color: var(--accent); margin-bottom: 15px;">
+                            <i class="fas fa-user-plus"></i> Add New User
+                        </h3>
+                        <div class="form-group">
+                            <label for="new-username">Username</label>
+                            <input type="text" id="new-username">
+                        </div>
+                        <div class="form-group">
+                            <label for="new-password">Password</label>
+                            <input type="password" id="new-password">
+                        </div>
+                        <div class="form-group">
+                            <label for="new-role">Role</label>
+                            <select id="new-role">
+                                <option value="owner">Owner</option>
+                                <option value="admin">Admin</option>
+                                <option value="developer">Developer</option>
+                                <option value="resseler">Resseler</option>
+                                <option value="biasa">Regular User</option>
+                            </select>
+                        </div>
+                        <button onclick="addUser()">
+                            <i class="fas fa-save"></i> SAVE USER
+                        </button>
+                        <div id="admin-result" class="result" style="margin-top: 20px;"></div>
+                    </div>
+                    
+                    <!-- Logs Tab -->
+                    <div id="logs-tab" class="tab-content">
+                        <h3 style="color: var(--accent); margin-bottom: 15px;">
+                            <i class="fas fa-clipboard-list"></i> System Logs
+                        </h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                            <div class="form-group">
+                                <label for="log-filter">Filter Logs</label>
+                                <select id="log-filter">
+                                    <option value="all">All Logs</option>
+                                    <option value="attack">Attack Logs</option>
+                                    <option value="user">User Activity</option>
+                                    <option value="admin">Admin Actions</option>
+                                    <option value="error">Errors</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="log-search">Search</label>
+                                <input type="text" id="log-search" placeholder="Search logs...">
+                            </div>
+                        </div>
+                        <button onclick="loadLogs()" style="margin-bottom: 15px;">
+                            <i class="fas fa-sync-alt"></i> REFRESH LOGS
+                        </button>
+                        <div id="system-logs" class="result" style="height: 400px;"></div>
+                    </div>
+                    
+                    <!-- Settings Tab -->
+                    <div id="settings-tab" class="tab-content">
+                        <h3 style="color: var(--accent); margin-bottom: 15px;">
+                            <i class="fas fa-cog"></i> System Settings
+                        </h3>
+                        
+                        <div class="form-group">
+                            <label for="system-name">System Name</label>
+                            <input type="text" id="system-name" value="WAYANG PROJECT">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="maintenance-mode">Maintenance Mode</label>
+                            <select id="maintenance-mode">
+                                <option value="false">Disabled</option>
+                                <option value="true">Enabled</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="max-attacks">Maximum Concurrent Attacks</label>
+                            <input type="number" id="max-attacks" min="1" max="100" value="10">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password-strength">Minimum Password Strength</label>
+                            <select id="password-strength">
+                                <option value="1">Low</option>
+                                <option value="2">Medium</option>
+                                <option value="3">High</option>
+                                <option value="4">Very High</option>
+                            </select>
+                        </div>
+                        
+                        <button onclick="saveSettings()">
+                            <i class="fas fa-save"></i> SAVE SETTINGS
+                        </button>
+                        <div id="settings-result" class="result" style="margin-top: 20px;"></div>
+                    </div>
+                </div>
+
+                <!-- Owner Panel -->
+                <div id="owner" class="panel">
+                    <h2 style="color: var(--owner); margin-bottom: 20px;">
+                        <i class="fas fa-crown"></i> OWNER TOOLS
+                    </h2>
+                    
+                    <div style="margin-bottom: 20px; background: rgba(255, 0, 255, 0.1); padding: 15px; border-radius: 8px; border-left: 3px solid var(--owner);">
+                        <i class="fas fa-exclamation-circle" style="color: var(--owner);"></i> 
+                        <span style="color: var(--owner);">OWNER NOTICE:</span> These tools have full system access. Use with extreme caution.
+                    </div>
+                    
+                    <div class="tool-grid">
+                        <div class="glass-panel tool-card" style="border: 1px solid var(--owner);" onclick="showOwnerPanel('database')">
+                            <h3 style="color: var(--owner); margin-bottom: 10px;">
+                                <i class="fas fa-database"></i> Database
+                            </h3>
+                            <div style="font-size: 13px;">
+                                Manage system database
+                            </div>
+                        </div>
+                        <div class="glass-panel tool-card" style="border: 1px solid var(--owner);" onclick="showOwnerPanel('backup')">
+                            <h3 style="color: var(--owner); margin-bottom: 10px;">
+                                <i class="fas fa-save"></i> Backup/Restore
+                            </h3>
+                            <div style="font-size: 13px;">
+                                System backup and restore
+                            </div>
+                        </div>
+                        <div class="glass-panel tool-card" style="border: 1px solid var(--owner);" onclick="showOwnerPanel('shell')">
+                            <h3 style="color: var(--owner); margin-bottom: 10px;">
+                                <i class="fas fa-terminal"></i> System Shell
+                            </h3>
+                            <div style="font-size: 13px;">
+                                Execute system commands
+                            </div>
+                        </div>
+                        <div class="glass-panel tool-card" style="border: 1px solid var(--owner);" onclick="showOwnerPanel('license')">
+                            <h3 style="color: var(--owner); margin-bottom: 10px;">
+                                <i class="fas fa-key"></i> License Manager
+                            </h3>
+                            <div style="font-size: 13px;">
+                                Manage system licenses
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Database Subpanel -->
+                    <div id="owner-database" class="subpanel">
+                        <h3 style="color: var(--owner); margin-bottom: 15px;">
+                            <i class="fas fa-database"></i> Database Management
+                        </h3>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <button onclick="exportDatabase()" style="margin-right: 10px;">
+                                <i class="fas fa-file-export"></i> Export DB
+                            </button>
+                            <button onclick="importDatabase()">
+                                <i class="fas fa-file-import"></i> Import DB
+                            </button>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="db-query">SQL Query</label>
+                            <textarea id="db-query" rows="4" style="width: 100%; padding: 10px; background: rgba(26, 26, 26, 0.7); border: 1px solid var(--owner); color: var(--light); border-radius: 5px;"></textarea>
+                        </div>
+                        
+                        <button onclick="executeQuery()">
+                            <i class="fas fa-play"></i> EXECUTE QUERY
+                        </button>
+                        
+                        <div id="db-result" class="result" style="margin-top: 15px;"></div>
+                    </div>
+                    
+                    <!-- Shell Subpanel -->
+                    <div id="owner-shell" class="subpanel" style="display: none;">
+                        <h3 style="color: var(--owner); margin-bottom: 15px;">
+                            <i class="fas fa-terminal"></i> System Shell
+                        </h3>
+                        <div class="form-group">
+                            <label for="shell-command">Command</label>
+                            <input type="text" id="shell-command" placeholder="Enter system command">
+                        </div>
+                        <button onclick="executeShellCommand()">
+                            <i class="fas fa-play"></i> EXECUTE
+                        </button>
+                        <div id="shell-result" class="result" style="margin-top: 15px; min-height: 200px;"></div>
+                    </div>
+                </div>
+
+                <!-- Developer Panel -->
+                <div id="developer" class="panel">
+                    <h2 style="color: var(--developer); margin-bottom: 20px;">
+                        <i class="fas fa-code"></i> DEVELOPER TOOLS
+                    </h2>
+                    
+                    <div style="margin-bottom: 20px; background: rgba(0, 255, 0, 0.1); padding: 15px; border-radius: 8px; border-left: 3px solid var(--developer);">
+                        <i class="fas fa-lock" style="color: var(--developer);"></i> 
+                        <span style="color: var(--developer);">DEVELOPER ACCESS:</span> These tools require technical knowledge.
+                    </div>
+                    
+                    <div class="tool-grid">
+                        <div class="glass-panel tool-card" style="border: 1px solid var(--developer);" onclick="showDeveloperPanel('api')">
+                            <h3 style="color: var(--developer); margin-bottom: 10px;">
+                                <i class="fas fa-plug"></i> API Generator
+                            </h3>
+                            <div style="font-size: 13px;">
+                                Create custom API endpoints
+                            </div>
+                        </div>
+                        <div class="glass-panel tool-card" style="border: 1px solid var(--developer);" onclick="showDeveloperPanel('script')">
+                            <h3 style="color: var(--developer); margin-bottom: 10px;">
+                                <i class="fas fa-file-code"></i> Script Injector
+                            </h3>
+                            <div style="font-size: 13px;">
+                                Inject custom scripts
+                            </div>
+                        </div>
+                        <div class="glass-panel tool-card" style="border: 1px solid var(--developer);" onclick="showDeveloperPanel('debug')">
+                            <h3 style="color: var(--developer); margin-bottom: 10px;">
+                                <i class="fas fa-bug"></i> Debug Console
+                            </h3>
+                            <div style="font-size: 13px;">
+                                System debugging tools
+                            </div>
+                        </div>
+                        <div class="glass-panel tool-card" style="border: 1px solid var(--developer);" onclick="showDeveloperPanel('update')">
+                            <h3 style="color: var(--developer); margin-bottom: 10px;">
+                                <i class="fas fa-cloud-download-alt"></i> Update System
+                            </h3>
+                            <div style="font-size: 13px;">
+                                Push updates to all users
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- API Generator Subpanel -->
+                    <div id="developer-api" class="subpanel">
+                        <h3 style="color: var(--developer); margin-bottom: 15px;">
+                            <i class="fas fa-plug"></i> API Generator
+                        </h3>
+                        <div class="form-group">
+                            <label for="api-name">API Name</label>
+                            <input type="text" id="api-name" placeholder="user-data">
+                        </div>
+                        <div class="form-group">
+                            <label for="api-method">HTTP Method</label>
+                            <select id="api-method">
+                                <option value="GET">GET</option>
+                                <option value="POST">POST</option>
+                                <option value="PUT">PUT</option>
+                                <option value="DELETE">DELETE</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="api-endpoint">Endpoint</label>
+                            <input type="text" id="api-endpoint" placeholder="/api/v1/users">
+                        </div>
+                        <div class="form-group">
+                            <label for="api-response">Response Template</label>
+                            <textarea id="api-response" rows="5" placeholder='{"status": "success", "data": []}'></textarea>
+                        </div>
+                        <button onclick="generateAPI()">
+                            <i class="fas fa-code"></i> GENERATE API
+                        </button>
+                        <div id="api-result" class="result" style="margin-top: 15px;"></div>
+                    </div>
+                    
+                    <!-- Update System Subpanel -->
+                    <div id="developer-update" class="subpanel" style="display: none;">
+                        <h3 style="color: var(--developer); margin-bottom: 15px;">
+                            <i class="fas fa-cloud-download-alt"></i> System Update
+                        </h3>
+                        <div class="form-group">
+                            <label for="update-version">Version Number</label>
+                            <input type="text" id="update-version" placeholder="2.0.2">
+                        </div>
+                        <div class="form-group">
+                            <label for="update-message">Update Message</label>
+                            <textarea id="update-message" rows="3" placeholder="Important security updates..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="update-critical">Critical Update</label>
+                            <select id="update-critical">
+                                <option value="false">No</option>
+                                <option value="true">Yes (Forces immediate update)</option>
+                            </select>
+                        </div>
+                        <button onclick="pushUpdate()">
+                            <i class="fas fa-upload"></i> PUSH UPDATE TO ALL USERS
+                        </button>
+                        <div id="update-result" class="result" style="margin-top: 15px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Notification Popup -->
+    <div id="update-popup" class="popup-overlay">
+        <div class="popup-content glass-panel">
+            <button class="popup-close" onclick="closeUpdatePopup()">&times;</button>
+            <h2 style="color: var(--accent); margin-bottom: 15px;">
+                <i class="fas fa-cloud-download-alt"></i> SYSTEM UPDATE AVAILABLE
+            </h2>
+            <div id="update-popup-content">
+                <p><strong>Version:</strong> <span id="update-version-display">2.0.2</span></p>
+                <p><strong>Release Date:</strong> <span id="update-date-display">Today</span></p>
+                <div id="update-message-display" style="margin: 15px 0; padding: 10px; background: rgba(26, 26, 26, 0.7); border-radius: 5px;">
+                    Important security updates and bug fixes.
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button onclick="installUpdate()" style="flex: 1;">
+                        <i class="fas fa-download"></i> INSTALL NOW
+                    </button>
+                    <button onclick="closeUpdatePopup()" style="flex: 1; background: var(--dark);">
+                        <i class="fas fa-clock"></i> REMIND ME LATER
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // USER DATABASE WITH DEFAULT ADMIN
+        const users = {
+            "wayangowner": { 
+                password: "wayangmaster", 
+                role: "owner",
+                registered: "2023-01-01",
+                lastLogin: null
+            },
+            "wayangadmin": { 
+                password: "wayangadmin", 
+                role: "admin",
+                registered: "2023-01-01",
+                lastLogin: null
+            },
+            "wayangdev": { 
+                password: "wayangdev", 
+                role: "developer",
+                registered: "2023-01-01",
+                lastLogin: null
+            },
+            "wayangreseller": { 
+                password: "wayangresell", 
+                role: "resseler",
+                registered: "2023-01-01",
+                lastLogin: null
+            },
+            "wayanguser": { 
+                password: "wayanguser", 
+                role: "biasa",
+                registered: "2023-01-01",
+                lastLogin: null
+            }
+        };
+
+        // SYSTEM LOGS
+        const systemLogs = [
+            "[2023-11-01 10:00:00] [SYSTEM] WAYANG PROJECT initialized",
+            "[2023-11-01 10:01:23] [SYSTEM] Default accounts loaded",
+            "[2023-11-01 10:02:45] [SYSTEM] Ready for operations"
+        ];
+
+        // GLOBAL VARIABLES
+        let currentUser = null;
+        let activeAttacks = 0;
+        let isDDoSAttacking = false;
+        let ddosInterval;
+        let packetsSent = 0;
+        let attackStartTime = 0;
+        let pendingUpdate = null;
+
+        // MAIN FUNCTIONS
+
+        function login() {
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const resultDiv = document.getElementById("login-result");
+            
+            try {
+                if (!username || !password) {
+                    throw new Error("Please enter both username and password");
+                }
+                
+                if (users[username] && users[username].password === password) {
+                    currentUser = {
+                        username: username,
+                        role: users[username].role
+                    };
+                    
+                    document.getElementById("login-screen").style.display = "none";
+                    document.getElementById("app").style.display = "block";
+                    
+                    document.getElementById("user-name").textContent = username;
+                    document.getElementById("dashboard-username").textContent = username;
+                    
+                    setUserStatus(users[username].role);
+                    
+                    const now = new Date();
+                    users[username].lastLogin = now;
+                    document.getElementById("last-login").textContent = now.toLocaleString();
+                    document.getElementById("dashboard-lastlogin").textContent = now.toLocaleString();
+                    document.getElementById("dashboard-registered").textContent = users[username].registered;
+                    
+                    if (users[username].role === "admin") {
+                        document.querySelectorAll(".admin-only").forEach(el => el.style.display = "flex");
+                    }
+                    if (users[username].role === "owner") {
+                        document.querySelectorAll(".owner-only").forEach(el => el.style.display = "flex");
+                    }
+                    if (users[username].role === "developer") {
+                        document.querySelectorAll(".developer-only").forEach(el => el.style.display = "flex");
+                    }
+                    
+                    addSystemLog(`User ${username} logged in`, "user");
+                    showResult(resultDiv, "Login successful! Welcome to WAYANG PROJECT", "success");
+                    
+                    // Check for updates after login
+                    checkForUpdates();
+                    
+                    if (username === "wayangowner" && password === "wayangmaster") {
+                        setTimeout(() => {
+                            alert("⚠️ DEFAULT OWNER ACCOUNT ⚠️\nUsername: wayangowner\nPassword: wayangmaster\n\nPlease change password immediately!");
+                        }, 500);
+                    }
+                } else {
+                    throw new Error("Invalid username or password");
+                }
+            } catch (error) {
+                showResult(resultDiv, error.message, "error");
+                addSystemLog(`Failed login attempt for ${username}`, "error");
+            }
+        }
+
+        function logout() {
+            if (currentUser) {
+                addSystemLog(`User ${currentUser.username} logged out`, "user");
+            }
+            
+            currentUser = null;
+            document.getElementById("app").style.display = "none";
+            document.getElementById("login-screen").style.display = "flex";
+            document.getElementById("username").value = "";
+            document.getElementById("password").value = "";
+            document.getElementById("login-result").style.display = "none";
+            
+            document.querySelectorAll(".admin-only, .owner-only, .developer-only").forEach(el => el.style.display = "none");
+            
+            if (isDDoSAttacking) {
+                stopDDoSAttack();
+            }
+        }
+
+        function setUserStatus(role) {
+            const statusMap = {
+                "owner": { text: "OWNER", class: "status-owner" },
+                "admin": { text: "ADMIN", class: "status-admin" },
+                "developer": { text: "DEVELOPER", class: "status-developer" },
+                "resseler": { text: "RESSELLER", class: "status-resseler" },
+                "biasa": { text: "REGULAR", class: "status-biasa" }
+            };
+            
+            const status = statusMap[role] || statusMap["biasa"];
+            
+            const statusBadge = document.getElementById("user-status");
+            statusBadge.textContent = status.text;
+            statusBadge.className = `status-badge ${status.class}`;
+            
+            document.getElementById("dashboard-status").textContent = status.text;
+            document.getElementById("dashboard-status").className = `status-badge ${status.class}`;
+        }
+
+        // NEW FEATURE FUNCTIONS
+
+        function generateWhatsAppBot() {
+            const botType = document.getElementById("bot-type").value;
+            const trigger = document.getElementById("bot-trigger").value;
+            const response = document.getElementById("bot-response").value;
+            const target = document.getElementById("bot-target").value;
+            const resultDiv = document.getElementById("bot-result");
+            
+            if (!response) {
+                showResult(resultDiv, "Error: Response message is required", "error");
+                return;
+            }
+            
+            let botScript = "";
+            
+            switch(botType) {
+                case "auto-reply":
+                    botScript = `// WhatsApp Auto-Reply Bot\n`;
+                    botScript += `// Trigger: "${trigger}"\n\n`;
+                    botScript += `const whatsapp = require('whatsapp-web.js');\n`;
+                    botScript += `const client = new whatsapp.Client();\n\n`;
+                    botScript += `client.on('message', msg => {\n`;
+                    botScript += `  if (msg.body.toLowerCase().includes("${trigger.toLowerCase()}")) {\n`;
+                    botScript += `    msg.reply(\`${response.replace(/\n/g, '\\n')}\`);\n`;
+                    botScript += `    console.log("Replied to", msg.from);\n`;
+                    botScript += `  }\n`;
+                    botScript += `});\n\n`;
+                    botScript += `client.initialize();`;
+                    break;
+                    
+                case "spam-bot":
+                    botScript = `// WhatsApp Spam Bot\n`;
+                    botScript += `// Target: ${target || "All chats"}\n\n`;
+                    botScript += `const whatsapp = require('whatsapp-web.js');\n`;
+                    botScript += `const client = new whatsapp.Client();\n\n`;
+                    botScript += `async function spamTarget() {\n`;
+                    botScript += `  const chat = await client.getChatById("${target}");\n`;
+                    botScript += `  for (let i = 0; i < 100; i++) {\n`;
+                    botScript += `    await chat.sendMessage(\`${response.replace(/\n/g, '\\n')} \${i+1}\`);\n`;
+                    botScript += `    await new Promise(resolve => setTimeout(resolve, 1000));\n`;
+                    botScript += `  }\n`;
+                    botScript += `}\n\n`;
+                    botScript += `client.on('ready', () => {\n`;
+                    botScript += `  console.log("Bot ready, starting spam...");\n`;
+                    botScript += `  spamTarget();\n`;
+                    botScript += `});\n\n`;
+                    botScript += `client.initialize();`;
+                    break;
+                    
+                default:
+                    botScript = "// Bot script generator error";
+            }
+            
+            resultDiv.textContent = botScript;
+            resultDiv.className = "result success";
+            addSystemLog(`Generated WhatsApp ${botType} bot script`, "developer");
+        }
+
+        function generateWebsite() {
+            const siteType = document.getElementById("website-type").value;
+            const siteName = document.getElementById("website-name").value;
+            const siteColor = document.getElementById("website-color").value;
+            const resultDiv = document.getElementById("website-result");
+            
+            if (!siteName) {
+                showResult(resultDiv, "Error: Website name is required", "error");
+                return;
+            }
+            
+            let websiteCode = `<!DOCTYPE html>\n<html lang="en">\n<head>\n`;
+            websiteCode += `  <meta charset="UTF-8">\n`;
+            websiteCode += `  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n`;
+            websiteCode += `  <title>${siteName}</title>\n`;
+            websiteCode += `  <style>\n    :root { --primary: ${siteColor}; }\n    body { font-family: Arial, sans-serif; }\n  </style>\n`;
+            websiteCode += `</head>\n<body>\n`;
+            websiteCode += `  <header style="background: ${siteColor}; color: white; padding: 20px;">\n`;
+            websiteCode += `    <h1>${siteName}</h1>\n  </header>\n\n`;
+            websiteCode += `  <main style="padding: 20px;">\n`;
+            
+            if (document.getElementById("page-home").checked) {
+                websiteCode += `    <section id="home">\n`;
+                websiteCode += `      <h2>Welcome to ${siteName}</h2>\n`;
+                websiteCode += `      <p>This is the home page of your new ${siteType} website.</p>\n`;
+                websiteCode += `    </section>\n\n`;
+            }
+            
+            if (document.getElementById("page-about").checked) {
+                websiteCode += `    <section id="about">\n`;
+                websiteCode += `      <h2>About Us</h2>\n`;
+                websiteCode += `      <p>Learn more about what we do.</p>\n`;
+                websiteCode += `    </section>\n\n`;
+            }
+            
+            websiteCode += `  </main>\n\n`;
+            websiteCode += `  <footer style="background: #333; color: white; padding: 10px; text-align: center;">\n`;
+            websiteCode += `    <p>&copy; ${new Date().getFullYear()} ${siteName}</p>\n`;
+            websiteCode += `  </footer>\n`;
+            websiteCode += `</body>\n</html>`;
+            
+            resultDiv.textContent = websiteCode;
+            resultDiv.className = "result success";
+            addSystemLog(`Generated ${siteType} website template`, "developer");
+        }
+
+        function revealWifiPasswords() {
+            const os = document.getElementById("wifi-os").value;
+            const interface = document.getElementById("wifi-interface").value || "Wi-Fi";
+            const resultDiv = document.getElementById("wifi-result");
+            
+            let passwords = "";
+            
+            switch(os) {
+                case "windows":
+                    passwords = `C:\\> netsh wlan show profile name="${interface}" key=clear\n\n`;
+                    passwords += `Wi-Fi Profile: ${interface}\n`;
+                    passwords += `========================\n`;
+                    passwords += `SSID: HomeWiFi\n`;
+                    passwords += `Authentication: WPA2-Personal\n`;
+                    passwords += `Key Content: MySecretPassword123\n\n`;
+                    passwords += `SSID: OfficeWiFi\n`;
+                    passwords += `Authentication: WPA2-Enterprise\n`;
+                    passwords += `Key Content: (not available for enterprise networks)`;
+                    break;
+                    
+                case "macos":
+                    passwords = `$ security find-generic-password -ga "${interface}"\n\n`;
+                    passwords += `keychain: "/Library/Keychains/System.keychain"\n`;
+                    passwords += `class: "genp"\n`;
+                    passwords += `attributes:\n`;
+                    passwords += `  0x00000007 <blob>="${interface}"\n`;
+                    passwords += `  0x00000008 <blob>=<NULL>\n`;
+                    passwords += `  "acct"<blob>="HomeWiFi"\n`;
+                    passwords += `password: "MySecretPassword123"`;
+                    break;
+                    
+                case "linux":
+                    passwords = `$ sudo cat /etc/NetworkManager/system-connections/${interface}.nmconnection\n\n`;
+                    passwords += `[connection]\n`;
+                    passwords += `id=${interface}\n`;
+                    passwords += `uuid=12345678-1234-1234-1234-123456789abc\n`;
+                    passwords += `type=wifi\n\n`;
+                    passwords += `[wifi]\n`;
+                    passwords += `ssid=HomeWiFi\n`;
+                    passwords += `mode=infrastructure\n\n`;
+                    passwords += `[wifi-security]\n`;
+                    passwords += `key-mgmt=wpa-psk\n`;
+                    passwords += `psk=MySecretPassword123`;
+                    break;
+                    
+                case "android":
+                    passwords = `$ su\n`;
+                    passwords += `# cat /data/misc/wifi/wpa_supplicant.conf\n\n`;
+                    passwords += `network={\n`;
+                    passwords += `  ssid="HomeWiFi"\n`;
+                    passwords += `  psk="MySecretPassword123"\n`;
+                    passwords += `  key_mgmt=WPA-PSK\n`;
+                    passwords += `  priority=1\n`;
+                    passwords += `}`;
+                    break;
+            }
+            
+            resultDiv.textContent = passwords;
+            resultDiv.className = "result success";
+            addSystemLog(`Revealed WiFi passwords for ${os}`, "developer");
+        }
+
+        function pushUpdate() {
+            const version = document.getElementById("update-version").value;
+            const message = document.getElementById("update-message").value;
+            const isCritical = document.getElementById("update-critical").value === "true";
+            const resultDiv = document.getElementById("update-result");
+            
+            if (!version || !message) {
+                showResult(resultDiv, "Error: Version and message are required", "error");
+                return;
+            }
+            
+            pendingUpdate = {
+                version,
+                message,
+                date: new Date().toLocaleDateString(),
+                critical: isCritical
+            };
+            
+            showResult(resultDiv, `Update v${version} prepared and will be pushed to all users`, "success");
+            addSystemLog(`Update v${version} prepared by ${currentUser.username}`, "developer");
+            
+            // In a real system, this would be sent to a server and pushed to all connected clients
+        }
+
+        function checkForUpdates() {
+            if (pendingUpdate) {
+                document.getElementById("update-version-display").textContent = pendingUpdate.version;
+                document.getElementById("update-date-display").textContent = pendingUpdate.date;
+                document.getElementById("update-message-display").textContent = pendingUpdate.message;
+                
+                if (pendingUpdate.critical) {
+                    document.getElementById("update-popup-content").style.borderLeft = "4px solid var(--error)";
+                } else {
+                    document.getElementById("update-popup-content").style.borderLeft = "4px solid var(--accent)";
+                }
+                
+                document.getElementById("update-popup").style.display = "flex";
+            }
+        }
+
+        function closeUpdatePopup() {
+            document.getElementById("update-popup").style.display = "none";
+        }
+
+        function installUpdate() {
+            alert(`System will now update to v${pendingUpdate.version}\n\nPlease wait while we apply the updates...`);
+            document.getElementById("update-popup").style.display = "none";
+            addSystemLog(`User installed update v${pendingUpdate.version}`, "system");
+        }
+
+        // EXISTING FUNCTIONS (modified as needed)
+
+        function launchWhatsAppBug() {
+            const target = document.getElementById("target-number").value;
+            const bugType = document.getElementById("bug-type").value;
+            const intensity = document.getElementById("intensity").value;
+            const resultDiv = document.getElementById("bug-result");
+            const attackBtn = document.getElementById("whatsapp-attack-btn");
+
+            if (!target.startsWith("+")) {
+                showResult(resultDiv, "Error: Target must start with country code (e.g. +62)", "error");
+                return;
+            }
+
+            activeAttacks++;
+            updateActiveAttacks();
+            attackBtn.disabled = true;
+            attackBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ATTACKING...';
+            
+            resultDiv.textContent = `[WAYANG SYSTEM] Initializing ${bugType} attack on ${target} (Intensity: ${intensity})...\n`;
+            resultDiv.textContent += `[WAYANG SYSTEM] Checking target availability...\n`;
+            
+            setTimeout(() => {
+                resultDiv.textContent += `[WAYANG SYSTEM] Target verified. Bypassing WhatsApp security...\n`;
+                setTimeout(() => {
+                    resultDiv.textContent += `[WAYANG SYSTEM] Payload delivered (${intensity}x amplification)!`;
+                    setTimeout(() => {
+                        resultDiv.textContent += `\n[WAYANG SYSTEM] Target compromised!\n\nAttack completed at ${new Date().toLocaleTimeString()}`;
+                        resultDiv.className = "result success";
+                        activeAttacks--;
+                        updateActiveAttacks();
+                        attackBtn.disabled = false;
+                        attackBtn.innerHTML = '<i class="fas fa-rocket"></i> LAUNCH ATTACK';
+                        addSystemLog(`WhatsApp ${bugType} attack on ${target} (Intensity: ${intensity})`, "attack");
+                    }, 1000);
+                }, 1000);
+            }, 1000);
+        }
+
+        function launchDDoSAttack() {
+            const target = document.getElementById("target-ip").value;
+            const duration = parseInt(document.getElementById("duration").value);
+            const method = document.getElementById("ddos-method").value;
+            const threads = parseInt(document.getElementById("threads").value);
+            const resultDiv = document.getElementById("ddos-result");
+            const attackBtn = document.getElementById("ddos-attack-btn");
+            const progressBar = document.getElementById("ddos-progress-bar");
+
+            if (!target) {
+                showResult(resultDiv, "Error: Please enter target", "error");
+                return;
+            }
+
+            if (isDDoSAttacking) {
+                stopDDoSAttack();
+                return;
+            }
+
+            activeAttacks++;
+            updateActiveAttacks();
+            isDDoSAttacking = true;
+            packetsSent = 0;
+            attackStartTime = Date.now();
+            
+            attackBtn.innerHTML = '<i class="fas fa-stop"></i> STOP ATTACK';
+            document.getElementById("ddos-progress").style.display = "block";
+            progressBar.style.width = "0%";
+            
+            resultDiv.textContent = `[WAYANG SYSTEM] Starting ${method} attack on ${target}\n`;
+            resultDiv.textContent += `[WAYANG SYSTEM] Duration: ${duration}s | Threads: ${threads}\n`;
+            resultDiv.className = "result";
+            
+            let seconds = 0;
+            ddosInterval = setInterval(() => {
+                seconds++;
+                const progress = Math.min(100, (seconds / duration) * 100);
+                progressBar.style.width = `${progress}%`;
+                
+                const newPackets = Math.floor(Math.random() * 1000 * threads);
+                packetsSent += newPackets;
+                
+                document.getElementById("packets-sent").textContent = packetsSent.toLocaleString();
+                document.getElementById("attack-time").textContent = `${seconds}s`;
+                document.getElementById("packet-rate").textContent = `${Math.floor(packetsSent / seconds)}/s`;
+                
+                resultDiv.textContent += `[${seconds}s] Sent ${newPackets.toLocaleString()} ${method} packets\n`;
+                resultDiv.scrollTop = resultDiv.scrollHeight;
+                
+                if (seconds >= duration) {
+                    stopDDoSAttack();
+                    resultDiv.textContent += `\n[WAYANG SYSTEM] Attack finished! ${packetsSent.toLocaleString()} total packets sent\n`;
+                    resultDiv.className = "result success";
+                    addSystemLog(`DDoS attack completed on ${target} (${packetsSent} packets)`, "attack");
+                }
+            }, 1000);
+            
+            addSystemLog(`DDoS ${method} attack started on ${target}`, "attack");
+        }
+
+        // HELPER FUNCTIONS
+
+        function showWhatsAppPanel(panel) {
+            document.querySelectorAll("#whatsapp .subpanel").forEach(p => p.style.display = "none");
+            document.getElementById(`whatsapp-${panel}`).style.display = "block";
+        }
+
+        function showWebsitePanel(panel) {
+            document.querySelectorAll("#website .subpanel").forEach(p => p.style.display = "none");
+            document.getElementById(`website-${panel}`).style.display = "block";
+        }
+
+        function showWifiPanel(panel) {
+            document.querySelectorAll("#wifi .subpanel").forEach(p => p.style.display = "none");
+            document.getElementById(`wifi-${panel}`).style.display = "block";
+        }
+
+        function showDeveloperPanel(panel) {
+            document.querySelectorAll("#developer .subpanel").forEach(p => p.style.display = "none");
+            document.getElementById(`developer-${panel}`).style.display = "block";
+        }
+
+        function addSystemLog(message, type = "system") {
+            const timestamp = new Date().toISOString().replace('T', ' ').split('.')[0];
+            systemLogs.push(`[${timestamp}] [${type.toUpperCase()}] ${message}`);
+        }
+
+        function showResult(element, message, type) {
+            if (typeof element === "string") {
+                element = document.getElementById(element);
+            }
+            element.textContent = message;
+            element.style.display = "block";
+            element.className = `result ${type}`;
+        }
+
+        // INITIALIZE
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // Panel switching
+            document.querySelectorAll(".nav-item").forEach(item => {
+                item.addEventListener("click", function() {
+                    if (this.dataset.panel) {
+                        document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+                        document.getElementById(this.dataset.panel).classList.add("active");
+                        document.querySelectorAll(".nav-item").forEach(i => i.classList.remove("active"));
+                        this.classList.add("active");
+                    }
+                });
+            });
+
+            // Tab switching
+            document.querySelectorAll(".tab").forEach(tab => {
+                tab.addEventListener("click", function() {
+                    const tabId = this.dataset.tab + "-tab";
+                    document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
+                    document.getElementById(tabId).classList.add("active");
+                    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+                    this.classList.add("active");
+                });
+            });
+
+            // Intensity slider
+            document.getElementById("intensity").addEventListener("input", function() {
+                document.getElementById("intensity-value").textContent = this.value;
+            });
+
+            // Login button
+            document.getElementById("login-btn").addEventListener("click", login);
+            
+            // Enter key in password field
+            document.getElementById("password").addEventListener("keypress", function(e) {
+                if (e.key === "Enter") {
+                    login();
+                }
+            });
+
+            // Load initial data
+            if (typeof loadUsers === 'function') loadUsers();
+            if (typeof loadLogs === 'function') loadLogs();
+        });
+    </script>
+</body>
+</html>
